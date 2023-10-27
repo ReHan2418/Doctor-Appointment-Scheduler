@@ -81,9 +81,9 @@ function SignupPage() {
 
   const handleUserTypeChange = (event) => {
     const selectedUserType = event.target.value;
-  
+
     setUserType(selectedUserType);
-  
+
     if (selectedUserType === "Patient") {
       setLocation(0);
     }
@@ -199,7 +199,7 @@ function SignupPage() {
               className="form-select"
               required
             >
-              <option value="511045">Mahalunge</option>
+              <option value="511045">Sus Gaon</option>
               <option value="411045">Baner</option>
               <option value="411071">Wakad</option>
               <option value="411057">Hinjewadi</option>
