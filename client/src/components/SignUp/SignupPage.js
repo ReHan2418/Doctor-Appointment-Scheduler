@@ -40,7 +40,7 @@ function SignupPage() {
       password: form.password.value,
       confirmPassword: form.confirmPassword.value,
       userType: form.userType.value,
-      location: form.location && form.location.value !== undefined ? form.location.value : 0g
+      location: form.location && form.location.value !== undefined ? form.location.value : 0
     };
     fetch("http://localhost:3001/signUp", {
       method: "POST",
