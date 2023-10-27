@@ -254,6 +254,11 @@ function PatientAppointment() {
             },
         });
         let doctors = response.data;
+        doctors.forEach(doctor => {
+             console.log("Name:", `${doctor.userId.firstName} ${doctor.userId.lastName}`);
+                console.log("Location:", doctor.userId.location);
+        });
+
         if (doctors.length > 0) {
             // getAvailableSlot();
             // window.alert("success add")

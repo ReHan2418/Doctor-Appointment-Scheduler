@@ -13,7 +13,7 @@ const getDoctors = async (req, res) => {
         } else {
             doctors = await Doctor.find().populate({
                 path: 'userId',
-                select: 'firstName lastName email username',
+                select: 'firstName lastName email username location',
                 match: {
                     $or: [
                         { firstName: { $regex: searchdoctor } },
@@ -161,5 +161,5 @@ module.exports = {
     getDoctorById,
     saveDoctor,
     updateDoctor,
-    deleteDoctor
+    deleteDoctor,
 }
