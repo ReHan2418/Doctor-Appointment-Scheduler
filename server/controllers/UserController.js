@@ -127,7 +127,7 @@ const saveUser = async (req, res) => {
                                     User.deleteOne({ _id: userDetails });
                                     res.status(400).json({ message: "error", errors: [error2.message] });
                                 } else {
-                                    res.status(201).json({ message: "success 7" });
+                                    res.status(201).json({ message: "success" });
                                 }
                             }
                         );
@@ -145,7 +145,7 @@ const saveUser = async (req, res) => {
                                     User.deleteOne({ _id: userDetails });
                                     res.status(400).json({ message: "error", errors: [error2.message] });
                                 } else {
-                                    res.status(201).json({ message: "success 15" });
+                                    res.status(201).json({ message: "success" });
                                 }
                             }
                         );

@@ -132,7 +132,7 @@ module.exports = (req, res) => {
                                     res.json({ message: "error", errors: [error2.message] });
                                 } else {
                                     let resp = sendVerificationEmail(userDetails.email, verificationToken.token);
-                                    res.json({ message: "success 16" });
+                                    res.json({ message: "success" });
                                 }
                             }
                         );
@@ -152,7 +152,7 @@ module.exports = (req, res) => {
                                     res.json({ message: "error", errors: [error2.message] });
                                 } else {
                                     let resp = sendVerificationEmail(userDetails.email, verificationToken.token);
-                                    res.json({ message: "success 9" });
+                                    res.json({ message: "success" });
                                 }
                             }
                         );

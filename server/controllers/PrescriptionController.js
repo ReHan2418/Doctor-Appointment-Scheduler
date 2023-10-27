@@ -121,7 +121,7 @@ const getPrescriptions = async (req, res) => {
             }).then((prescriptions) => prescriptions.filter((pre => pre.appointmentId != null)));
         }
 
-        res.json({ message: "success 13", 'prescriptions': prescriptions });
+        res.json({ message: "success", 'prescriptions': prescriptions });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

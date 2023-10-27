@@ -62,7 +62,7 @@ const loginUser = (req, res) => {
                         };
 
                         const token = jwt.sign({ id: user._id, userType: user.userType },"secret", { expiresIn: "365d" });
-                        res.json({ message: "success 5", user: currentUser, token: token });
+                        res.json({ message: "success", user: currentUser, token: token });
                     }
                 });
             }

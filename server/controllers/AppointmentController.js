@@ -7,7 +7,7 @@ const mongoose = require("mongoose");
 const getDepartments = async (req, res) => {
     try {
         let departmentList = await Doctor.distinct("department");
-        res.json({ message: "success 1", 'departments': departmentList });
+        res.json({ message: "success", 'departments': departmentList });
     }
     catch (error) {
         res.status(500).json({ errors: [error.message] });
@@ -124,7 +124,7 @@ const getAppointments = async (req, res) => {
         // console.log("docID",docID);
         // console.log("isTimeSlotAvailable",isTimeSlotAvailable);
         // console.log("appointments",appointments);
-        res.json({ message: "success 10", 'appointments': appointments });
+        res.json({ message: "success", 'appointments': appointments });
     } catch (error) {
         res.status(500).json({ errors: [error.message] });
     }
@@ -151,7 +151,7 @@ const createAppointmentSlot = async (req, res) => {
             }
         }
         // console.log(appDate)
-        res.json({ message: "success 2" });
+        res.json({ message: "success" });
 
 
     } catch (error) {
@@ -172,7 +172,7 @@ const bookAppointment = async (req, res) => {
         });
         // console.log("appointment",appointment);
         if (appointment) {
-            res.json({ message: "success 12" });
+            res.json({ message: "success" });
         }
         else {
             res.status(404).json({ errors: ["Could not book appointment. Please Try again."] });
@@ -187,7 +187,7 @@ const deleteAppointment = async (req, res) => {
     try {
         let appointment = await Appointment.findByIdAndDelete(req.body.appointmentId);
         if (appointment) {
-            res.json({ message: "success 3" });
+            res.json({ message: "success" });
         }
         else {
             res.status(404).json({ errors: ["Could not delete appointment"] });
@@ -201,7 +201,7 @@ const getAppointmentById = async (req, res) => {
         const appointment = await Appointment.findById(req.params.id).lean();
         appointment.doctorDetails = await Doctor.findById(appointment.doctorId);
         appointment.patientDetails = await Patient.findById(appointment.patientId);
-        res.json({ message: "success 11", "appointment": appointment });
+        res.json({ message: "success", "appointment": appointment });
     } catch (error) {
         res.status(404).json({ errors: [error.message] });
     }
@@ -224,7 +224,7 @@ const updateAppointmentById = async (req, res) => {
                 'appointmentDate': req.body.appDate,
                 'appointmentTime': req.body.appTime,
             })
-            res.json({ message: "success 4" });
+            res.json({ message: "success" });
         }
 
     } catch (error) {

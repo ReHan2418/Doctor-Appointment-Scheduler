@@ -104,7 +104,7 @@ const signUp = (req, res) => {
                                     User.deleteOne({ _id: userDetails });
                                     res.json({ message: "error", errors: [error2.message] });
                                 } else {
-                                    res.json({ message: "success 6" });
+                                    res.json({ message: "success" });
                                 }
                             }
                         );
@@ -123,7 +123,7 @@ const signUp = (req, res) => {
                                     User.deleteOne({ _id: userDetails });
                                     res.json({ message: "error", errors: [error2.message] });
                                 } else {
-                                    res.json({ message: "success 14" });
+                                    res.json({ message: "success" });
                                 }
                             }
                         );
