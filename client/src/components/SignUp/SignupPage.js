@@ -13,7 +13,7 @@ function SignupPage() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [userType, setUserType] = useState("");
-  const [location, setLocation] = useState();
+  const [location, setLocation] = useState(0);
   const [passwordMatchDisplay, setPasswordMatchDisplay] = useState("none");
   // const [passwordValidationDisplay, setPasswordValidationDisplay] = useState('none')
   const [passwordValidationMessage, setPasswordValidationMessage] =
@@ -40,7 +40,7 @@ function SignupPage() {
       password: form.password.value,
       confirmPassword: form.confirmPassword.value,
       userType: form.userType.value,
-      location: form.location.value
+      location: form.location && form.location.value !== undefined ? form.location.value : 0g
     };
     fetch("http://localhost:3001/signUp", {
       method: "POST",
@@ -78,6 +78,16 @@ function SignupPage() {
       setPasswordMatchDisplay("block");
     }
   }, [password, confirmPassword]);
+
+  const handleUserTypeChange = (event) => {
+    const selectedUserType = event.target.value;
+  
+    setUserType(selectedUserType);
+  
+    if (selectedUserType === "Patient") {
+      setLocation(0);
+    }
+  };
 
   return (
     <div id={styles.signUpBody}>
@@ -169,7 +179,7 @@ function SignupPage() {
               id="userType"
               name="userType"
               value={userType}
-              onChange={(event) => setUserType(event.target.value)}
+              onChange={(event) => handleUserTypeChange(event)}
               className="form-select"
               required
             >
