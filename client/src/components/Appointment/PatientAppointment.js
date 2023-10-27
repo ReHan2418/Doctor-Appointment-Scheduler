@@ -1,55 +1,50 @@
-import React, { useContext, useEffect, useState } from "react";
-import styles from "./Appointment.module.css";
-import { useNavigate } from "react-router-dom";
-import ErrorDialogueBox from "../MUIDialogueBox/ErrorDialogueBox";
-import { UserContext } from "../../Context/UserContext";
-import Box from "@mui/material/Box";
+import React, { useContext, useEffect, useState } from 'react';
+import styles from './Appointment.module.css';
+import { useNavigate } from 'react-router-dom';
+import ErrorDialogueBox from '../MUIDialogueBox/ErrorDialogueBox';
+import { UserContext } from '../../Context/UserContext';
+import Box from '@mui/material/Box';
 // import DatePicker from '../Datepicker/DatePicker';
-import dayjs from "dayjs";
+import dayjs from 'dayjs';
 // import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 // import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 // import { StaticDatePicker } from '@mui/x-date-pickers/StaticDatePicker';
 // import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
 // import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
-import MyCalendar from "../Datepicker/MyCalendar";
-import moment from "moment";
-import axios from "axios";
+import MyCalendar from '../Datepicker/MyCalendar';
+import moment from 'moment';
+import axios from 'axios';
 import {
     BootstrapDialog,
     BootstrapDialogTitle,
-} from "../MUIDialogueBox/BoostrapDialogueBox";
-import DialogContent from "@mui/material/DialogContent";
-import AppointmentForm from "../Forms/AppointmentForm";
-import AppointmentTable from "../MUITable/AppointmentTable";
+} from '../MUIDialogueBox/BoostrapDialogueBox';
+import DialogContent from '@mui/material/DialogContent';
+import AppointmentForm from '../Forms/AppointmentForm';
+import AppointmentTable from '../MUITable/AppointmentTable';
 
 function PatientAppointment() {
     const navigate = useNavigate();
 
-    const [pincode,setPincode] = useState();
-    const getPinCode = () => {
+    // const [pincode, setPincode] = useState();
+    const getPinCode = async () => {
         navigator.geolocation.getCurrentPosition(async (pos) => {
             const { latitude, longitude } = pos.coords;
             console.log(latitude, longitude);
-            const url =
-                `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`;
+            const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`;
             try {
-                const response = await axios.get(
-                    url
-                );
-                console.log(response.data.address.postcode);
-                setPincode(response.data.address.postcode)
+                const response = await axios.get(url);
+                const pincode = response.data.address.postcode;
+                console.log(response.data.address);
+                // setPincode(pincode);
+                // getDoctorList()
             } catch (error) {
+                console.error(error);
             }
         });
     };
-    
-
-    useEffect(() => {
-        getPinCode();
-    });
 
     //this tells you which slot was clicked among the "available slots"
-    const [clickedTimeSlot, setClickedTimeSlot] = useState("");
+    const [clickedTimeSlot, setClickedTimeSlot] = useState('');
 
     // const [dateClicked,setDateClicked] = useState(dayjs());
     const [date, setDate] = useState(new Date());
@@ -61,12 +56,12 @@ function PatientAppointment() {
     const [doctorList, setDoctorList] = useState([]);
     const [patientList, setPatientList] = useState([]);
 
-    const [departmentSelected, setDepartmentSelected] = useState("");
-    const [doctorSelected, setDoctorSelected] = useState("");
+    const [departmentSelected, setDepartmentSelected] = useState('');
+    const [doctorSelected, setDoctorSelected] = useState('');
 
     const handleDepartmentChange = (event) => {
         setDepartmentSelected(event.target.value);
-        setDoctorSelected("");
+        setDoctorSelected('');
     };
     const handleDoctorChange = (event) => {
         setDoctorSelected(event.target.value);
@@ -108,11 +103,11 @@ function PatientAppointment() {
             reqObj,
             {
                 headers: {
-                    authorization: `Bearer ${localStorage.getItem("token")}`,
+                    authorization: `Bearer ${localStorage.getItem('token')}`,
                 },
             }
         );
-        if (response.data.message == "success") {
+        if (response.data.message == 'success') {
             // getAvailableSlot();
             // window.alert("success add")
             getAvailableSlots();
@@ -123,13 +118,13 @@ function PatientAppointment() {
     };
 
     const getformDate = (mydate) => {
-        const parts = mydate.split("-");
+        const parts = mydate.split('-');
         const d = new Date(+parts[0], parts[1] - 1, +parts[2], 12);
         return d;
     };
 
     const formatDateForDateInput = (dateOfJoining) => {
-        dateOfJoining = moment(new Date(dateOfJoining)).format("YYYY-MM-DD");
+        dateOfJoining = moment(new Date(dateOfJoining)).format('YYYY-MM-DD');
         // console.log("dateOfJoining",dateOfJoining);
         return dateOfJoining;
     };
@@ -154,11 +149,13 @@ function PatientAppointment() {
                 },
                 {
                     headers: {
-                        authorization: `Bearer ${localStorage.getItem("token")}`,
+                        authorization: `Bearer ${localStorage.getItem(
+                            'token'
+                        )}`,
                     },
                 }
             );
-            if (response.data.message == "success") {
+            if (response.data.message == 'success') {
                 // getAvailableSlot();
                 // window.alert("success add")
                 // setAvailableSlot(response.data.appointments)
@@ -194,19 +191,25 @@ function PatientAppointment() {
                 },
                 {
                     headers: {
-                        authorization: `Bearer ${localStorage.getItem("token")}`,
+                        authorization: `Bearer ${localStorage.getItem(
+                            'token'
+                        )}`,
                     },
                 }
             );
-            if (response.data.message == "success") {
+            if (response.data.message == 'success') {
                 // getAvailableSlot();
                 // window.alert("success add")
                 // setAvailableSlot(response.data.appointments)
                 let aptms = response.data.appointments;
                 // console.log("aptms", aptms);
                 let sortedAptms = aptms.sort((a, b) => {
-                    const timeA = new Date(`01/01/2000 ${a["appointmentTime"]}`);
-                    const timeB = new Date(`01/01/2000 ${b["appointmentTime"]}`);
+                    const timeA = new Date(
+                        `01/01/2000 ${a['appointmentTime']}`
+                    );
+                    const timeB = new Date(
+                        `01/01/2000 ${b['appointmentTime']}`
+                    );
                     return timeA - timeB;
                 });
 
@@ -230,16 +233,19 @@ function PatientAppointment() {
     };
 
     const deleteBookedSlots = async (appId) => {
-        console.log("delete slot with id", appId);
-        let response = await axios.delete(`http://localhost:3001/appointments/`, {
-            headers: {
-                authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-            data: {
-                appointmentId: appId,
-            },
-        });
-        if (response.data.message == "success") {
+        console.log('delete slot with id', appId);
+        let response = await axios.delete(
+            `http://localhost:3001/appointments/`,
+            {
+                headers: {
+                    authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
+                data: {
+                    appointmentId: appId,
+                },
+            }
+        );
+        if (response.data.message == 'success') {
             // getAvailableSlot();
             // window.alert("success add")
             getAvailableSlots();
@@ -248,43 +254,46 @@ function PatientAppointment() {
     };
 
     const getDoctorList = async () => {
-        let response = await axios.get(`http://localhost:3001/doctors`, {
-            headers: {
-                authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-        });
-        let doctors = response.data;
-        doctors.forEach(doctor => {
-             console.log("Name:", `${doctor.userId.firstName} ${doctor.userId.lastName}`);
-                console.log("Location:", doctor.userId.location);
-        });
+        const pincode = 511045;
+        try {
+            let response = await axios.get(`http://localhost:3001/doctors`, {
+                headers: {
+                    authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
+            });
 
-        if (doctors.length > 0) {
-            // getAvailableSlot();
-            // window.alert("success add")
-            // setAvailableSlot(response.data.appointments)
-            // console.log("++++",doctors);
-            // doctors.sort(function(a, b){
-            //     return a.zzz - b.id;
-            // });
-            if (!departmentSelected) {
-                setDoctorList(doctors);
+            let doctors = response.data;
+
+            // Filter doctors based on the pincode
+            let filteredDoctors = doctors.filter((doctor) => {
+                return doctor.userId.location === pincode;
+            });
+            console.log('filteredDoctors', filteredDoctors);
+            if (filteredDoctors.length > 0) {
+                if (!departmentSelected) {
+                    setDoctorList(filteredDoctors);
+                } else {
+                    let departmentFilteredDocs = filteredDoctors.filter((doc) => {
+                        return doc.department === departmentSelected;
+                    });
+                    setDoctorList(departmentFilteredDocs);
+                }
             } else {
-                // setDoctorList([]);
-                let filterdDocs = doctors.filter((doc) => {
-                    return doc.department == departmentSelected;
-                });
-                setDoctorList(filterdDocs);
+                // Handle case where no matching doctors are found
+                // window.alert("No doctors found in the specified pincode")
+                setDoctorList([]);
             }
-        } else {
-            // window.alert("error add")
+        } catch (error) {
+            // Handle error from the API request
+            console.error('Error fetching doctor list:', error);
+            // window.alert("Error fetching doctor list")
         }
     };
 
     const getDepartmentList = async () => {
         let response = await axios.get(`http://localhost:3001/departments`, {
             headers: {
-                authorization: `Bearer ${localStorage.getItem("token")}`,
+                authorization: `Bearer ${localStorage.getItem('token')}`,
             },
         });
         let departments = response.data.departments;
@@ -296,9 +305,13 @@ function PatientAppointment() {
     };
 
     const getPatients = async () => {
-        const response = await axios.get("http://localhost:3001/patients");
+        const response = await axios.get('http://localhost:3001/patients');
         setPatientList(response.data);
     };
+
+    useEffect(() => {
+        getPinCode();
+    }, []);
 
     useEffect(() => {
         getDepartmentList();
@@ -306,6 +319,7 @@ function PatientAppointment() {
         getAvailableSlots();
         getBookedSlots();
         getPatients();
+
     }, [date, departmentSelected, doctorSelected]);
 
     return (
@@ -326,8 +340,11 @@ function PatientAppointment() {
                     <h4>Select Date and Doctor</h4>
                     <div className="my-4 row">
                         <div className="col-12">
-                            <label for="department" className="col-sm-3 col-form-label ">
-                                Department:{" "}
+                            <label
+                                for="department"
+                                className="col-sm-3 col-form-label "
+                            >
+                                Department:{' '}
                             </label>
                             <select
                                 name="department"
@@ -347,8 +364,11 @@ function PatientAppointment() {
                     </div>
                     <div className="my-4 row">
                         <div className="col-12">
-                            <label for="doctor" className="col-sm-3 col-form-label ">
-                                Doctor:{" "}
+                            <label
+                                for="doctor"
+                                className="col-sm-3 col-form-label "
+                            >
+                                Doctor:{' '}
                             </label>
                             <select
                                 name="doctor"
@@ -363,13 +383,15 @@ function PatientAppointment() {
                                     if (doctorSelected == doctor._id) {
                                         return (
                                             <option value={doctor._id} selected>
-                                                {doctor.userId.firstName} {doctor.userId.lastName}
+                                                {doctor.userId.firstName}{' '}
+                                                {doctor.userId.lastName}
                                             </option>
                                         );
                                     } else {
                                         return (
                                             <option value={doctor._id}>
-                                                {doctor.userId.firstName} {doctor.userId.lastName}
+                                                {doctor.userId.firstName}{' '}
+                                                {doctor.userId.lastName}
                                             </option>
                                         );
                                     }
@@ -379,8 +401,11 @@ function PatientAppointment() {
                     </div>
                     <div className="mt-4 row">
                         <div className="col-12">
-                            <label for="appDate" className="col-sm-3 col-form-label ">
-                                Date:{" "}
+                            <label
+                                for="appDate"
+                                className="col-sm-3 col-form-label "
+                            >
+                                Date:{' '}
                             </label>
                             <input
                                 id="appDate"
@@ -388,7 +413,9 @@ function PatientAppointment() {
                                 type="date"
                                 className="col-form-control col-sm-7"
                                 value={formatDateForDateInput(date)}
-                                onChange={(e) => setDate(getformDate(e.target.value))}
+                                onChange={(e) =>
+                                    setDate(getformDate(e.target.value))
+                                }
                             />
                         </div>
                     </div>
@@ -398,8 +425,8 @@ function PatientAppointment() {
                         {/* </div> */}
                         {availableSlots.length > 0 ? (
                             <div className={styles.availableSlotsHeader}>
-                                {" "}
-                                <h4 className="mt-5">Available Slots</h4>{" "}
+                                {' '}
+                                <h4 className="mt-5">Available Slots</h4>{' '}
                                 <p>Click a slot to book appointments</p>
                             </div>
                         ) : (
